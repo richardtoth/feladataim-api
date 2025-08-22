@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
-    use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
@@ -41,7 +39,6 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        $this->authorize('view', $todo);
         return $todo;
     }
 
@@ -50,8 +47,6 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        $this->authorize('update', $todo);
-
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
@@ -69,7 +64,6 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        $this->authorize('delete', $todo);
         $todo->delete();
 
         return response()->json(null, 204);
