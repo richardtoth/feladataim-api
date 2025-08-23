@@ -13,8 +13,7 @@ class TodoController extends Controller
 {
     public function __construct(
         private readonly TodoService $todoService
-    ) {
-    }
+    ) {}
 
     public function index()
     {

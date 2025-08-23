@@ -14,8 +14,7 @@ class TodoDTO
         public readonly ?string $description = null,
         public readonly bool $isCompleted = false,
         public readonly ?string $dueDate = null,
-    ) {
-    }
+    ) {}
 
     public static function buildFromRequest(array $data, int $userId): self
     {

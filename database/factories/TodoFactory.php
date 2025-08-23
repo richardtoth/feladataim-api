@@ -18,11 +18,11 @@ class TodoFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),
-            'title'       => $this->faker->sentence(3),
+            'user_id' => User::factory(),
+            'title' => $this->faker->sentence(3),
             'description' => $this->faker->optional()->paragraph(),
-            'is_completed'=> $this->faker->boolean(20),
-            'due_date'    => $this->faker->optional()->dateTimeBetween('now', '+1 month'),
+            'is_completed' => $this->faker->boolean(20),
+            'due_date' => $this->faker->optional()->dateTimeBetween('now', '+1 month'),
         ];
     }
 }

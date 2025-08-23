@@ -52,27 +52,27 @@ it('can create a todo', function () {
 
 it('can update own todo', function () {
     $todo = Todo::factory()->for($this->user)->create([
-        'title' => 'Old title'
+        'title' => 'Old title',
     ]);
 
     $response = $this->actingAs($this->user, 'sanctum')->putJson("/api/todos/{$todo->id}", [
-        'title' => 'Updated title'
+        'title' => 'Updated title',
     ]);
 
     $response->assertOk();
     $this->assertDatabaseHas('todos', [
         'id' => $todo->id,
-        'title' => 'Updated title'
+        'title' => 'Updated title',
     ]);
 });
 
 it('cannot update others todo', function () {
     $todo = Todo::factory()->for($this->otherUser)->create([
-        'title' => 'Old title'
+        'title' => 'Old title',
     ]);
 
     $response = $this->actingAs($this->user, 'sanctum')->putJson("/api/todos/{$todo->id}", [
-        'title' => 'Updated title'
+        'title' => 'Updated title',
     ]);
 
     $response->assertForbidden();
