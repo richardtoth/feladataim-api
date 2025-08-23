@@ -15,7 +15,7 @@ it('can list own todos', function () {
     $response = $this->actingAs($this->user, 'sanctum')->getJson('/api/todos');
 
     $response->assertOk();
-    $response->assertJsonCount(3); // csak a saját todo-it látja
+    $response->assertJsonCount(3, 'data'); // csak a saját todo-it látja
 });
 
 it('can view own todo', function () {
@@ -24,7 +24,7 @@ it('can view own todo', function () {
     $response = $this->actingAs($this->user, 'sanctum')->getJson("/api/todos/{$todo->id}");
 
     $response->assertOk();
-    $response->assertJsonFragment(['id' => $todo->id]);
+    $response->assertJsonFragment(['id' => $todo->id], 'data');
 });
 
 it('cannot view others todo', function () {

@@ -2,70 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\TodoDTO;
+use App\Http\Requests\Todo\StoreTodoRequest;
+use App\Http\Requests\Todo\UpdateTodoRequest;
+use App\Http\Resources\TodoResource;
 use App\Models\Todo;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\TodoService;
 
 class TodoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+        private readonly TodoService $todoService
+    ) {
+    }
+
     public function index()
     {
-        return Auth::user()->todos;
+        return TodoResource::collection($this->todoService->allForUser(auth()->user()->id));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): JsonResponse
+    public function store(StoreTodoRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
-        ]);
+        $todo = $this->todoService->create(TodoDTO::buildFromRequest($request->validated(), auth()->user()->id));
 
-        $todo = Auth::user()->todos()->create($validated);
-
-        return response()->json($todo, 201);
+        return new TodoResource($todo);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Todo $todo)
     {
-        return $todo;
+        return TodoResource::make($todo);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Todo $todo)
+    public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'is_completed' => 'boolean',
-            'due_date' => 'nullable|date',
-        ]);
+        $todo = $this->todoService->update($todo,
+            TodoDTO::buildFromRequest($request->validated(), auth()->user()->id));
 
-        $todo->update($validated);
-
-        return response()->json($todo);
+        return TodoResource::make($todo);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Todo $todo)
     {
-        $todo->delete();
+        $this->todoService->delete($todo);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }
