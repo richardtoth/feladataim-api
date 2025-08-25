@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => env('CORS_ALLOWED_ORIGINS')
         ? explode(',', env('CORS_ALLOWED_ORIGINS'))
-        : ['*'], // default ha nincs env
+        : ['*'],
 
     'allowed_origins_patterns' => [],
 
