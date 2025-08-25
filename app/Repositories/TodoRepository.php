@@ -12,7 +12,7 @@ class TodoRepository
 {
     public function allForUser(int $userId): Collection
     {
-        return Todo::where('user_id', $userId)->get();
+        return Todo::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
     }
 
     public function create(TodoDTO $dto): Todo
